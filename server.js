@@ -39,12 +39,36 @@ const prompts = async () => {
       switch (answers.action) {
         case "View All Departments":
           console.log("View All Departments Case");
+          db.query(`SELECT * FROM department;`, (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.table(result);
+            }
+          });
           break;
         case "View All Roles":
           console.log("View All Roles Case");
+          db.query(`SELECT * FROM roles;`, (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.table(result);
+            }
+          });
           break;
         case "View All Employees":
           console.log("View All Employees Case");
+          db.query(
+            `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.department_name FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id ORDER BY employee.id; `,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.table(result);
+              }
+            }
+          );
           break;
         case "Add a Department":
           console.log("Add a Department Case");
