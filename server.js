@@ -72,6 +72,35 @@ const prompts = async () => {
           break;
         case "Add a Department":
           console.log("Add a Department Case");
+          inquirer
+            .prompt([
+              {
+                name: "departmentName",
+                type: "input",
+                message: "What is the name of the department?",
+              },
+            ])
+            .then((answers) => {
+              console.log("inside department prompt");
+              db.query(
+                `INSERT INTO department (department_name)
+              VALUES (?)`,
+                answers.departmentName,
+                (err, result) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    db.query(`SELECT * FROM department`, (err, result) => {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        console.table(result);
+                      }
+                    });
+                  }
+                }
+              );
+            });
           break;
         case "Add a Role":
           console.log("Add a Role Case");
