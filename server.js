@@ -6,9 +6,7 @@ const cTable = require("console.table");
 const db = mysql.createConnection(
   {
     host: "localhost",
-    // MySQL username,
     user: "root",
-    // TODO: Add MySQL password here
     password: "",
     database: "company_db",
   },
@@ -38,7 +36,7 @@ const prompts = async () => {
       console.log(answers.action);
       switch (answers.action) {
         case "View All Departments":
-          console.log("View All Departments Case");
+          console.log("Running View All Departments Case");
           db.query(`SELECT * FROM department;`, (err, result) => {
             if (err) {
               console.log(err);
@@ -48,7 +46,7 @@ const prompts = async () => {
           });
           break;
         case "View All Roles":
-          console.log("View All Roles Case");
+          console.log("Running View All Roles Case");
           db.query(`SELECT * FROM roles;`, (err, result) => {
             if (err) {
               console.log(err);
@@ -58,7 +56,7 @@ const prompts = async () => {
           });
           break;
         case "View All Employees":
-          console.log("View All Employees Case");
+          console.log("Running View All Employees Case");
           db.query(
             `SELECT employee.id, employee.first_name, employee.last_name, roles.title, roles.salary, department.department_name FROM employee LEFT JOIN roles ON employee.role_id = roles.id LEFT JOIN department ON roles.department_id = department.id ORDER BY employee.id; `,
             (err, result) => {
@@ -71,7 +69,7 @@ const prompts = async () => {
           );
           break;
         case "Add a Department":
-          console.log("Add a Department Case");
+          console.log("Running Add a Department Case");
           inquirer
             .prompt([
               {
@@ -103,7 +101,7 @@ const prompts = async () => {
             });
           break;
         case "Add a Role":
-          console.log("Add a Role Case");
+          console.log("Running Add a Role Case");
           inquirer
             .prompt([
               {
@@ -149,7 +147,7 @@ const prompts = async () => {
             });
           break;
         case "Add an Employee":
-          console.log("Add an Employee Case");
+          console.log("Running Add an Employee Case");
           inquirer
             .prompt([
               {
@@ -195,7 +193,32 @@ const prompts = async () => {
             });
           break;
         case "Update an Employee Role":
-          console.log("Update an Employee Role");
+          console.log("Running Update an Employee Role Case");
+          let employeesQuery = db.query(
+            `SELECT CONCAT(employee.first_name, " ", employee.last_name) AS Name FROM employee;`,
+            (err, result) => {
+              if (err) {
+                return "error";
+              } else {
+                result.forEach((result) => {
+                  console.log(JSON.stringify(result));
+                });
+              }
+            }
+          );
+          inquirer
+            .prompt([
+              {
+                name: "employeeName",
+                type: "list",
+                message: "Which employee's role do you want to update?",
+                choices: [employeesQuery],
+              },
+            ])
+            .then((answers) => {
+              console.log("inside department prompt");
+              console.log(answers);
+            });
           break;
         default:
           console.log("Default Case");
