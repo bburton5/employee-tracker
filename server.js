@@ -104,6 +104,49 @@ const prompts = async () => {
           break;
         case "Add a Role":
           console.log("Add a Role Case");
+          inquirer
+            .prompt([
+              {
+                name: "roleTitle",
+                type: "input",
+                message: "What is the title of the role?",
+              },
+              {
+                name: "roleSalary",
+                type: "number",
+                message: "What is this role's salary?",
+              },
+              {
+                name: "roleDepartmentId",
+                type: "number",
+                message: "What department number is this role under?",
+              },
+            ])
+            .then((answers) => {
+              console.log("inside role prompt");
+              db.query(
+                `INSERT INTO roles (title, salary, department_id)
+              VALUES (?, ?, ?)`,
+                [
+                  answers.roleTitle,
+                  answers.roleSalary,
+                  answers.roleDepartmentId,
+                ],
+                (err, result) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    db.query(`SELECT * FROM roles`, (err, result) => {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        console.table(result);
+                      }
+                    });
+                  }
+                }
+              );
+            });
           break;
         case "Add an Employee":
           console.log("Add an Employee Case");
