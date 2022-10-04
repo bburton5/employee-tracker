@@ -150,6 +150,49 @@ const prompts = async () => {
           break;
         case "Add an Employee":
           console.log("Add an Employee Case");
+          inquirer
+            .prompt([
+              {
+                name: "employeeFirstName",
+                type: "input",
+                message: "What is the employee's first name?",
+              },
+              {
+                name: "employeeLastName",
+                type: "input",
+                message: "What is the employee's last name?",
+              },
+              {
+                name: "employeeRole",
+                type: "number",
+                message: "What is the employee's role?",
+              },
+            ])
+            .then((answers) => {
+              console.log("inside add employee prompt");
+              db.query(
+                `INSERT INTO employee (first_name, last_name, role_id)
+              VALUES (?, ?, ?)`,
+                [
+                  answers.employeeFirstName,
+                  answers.employeeLastName,
+                  answers.employeeRole,
+                ],
+                (err, result) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    db.query(`SELECT * FROM employee`, (err, result) => {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        console.table(result);
+                      }
+                    });
+                  }
+                }
+              );
+            });
           break;
         case "Update an Employee Role":
           console.log("Update an Employee Role");
