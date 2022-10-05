@@ -13,6 +13,12 @@ const db = mysql.createConnection(
   console.log(`Connected to the company_db database.`)
 );
 
+const employeeChoices = async () => {
+  const employeeQuery = `SELECT CONCAT(employee.first_name, " ", employee.last_name) AS name FROM employee;`;
+  const employees = await db.query(employeeQuery);
+  return employees[0];
+};
+
 const prompts = async () => {
   return inquirer
     .prompt([
@@ -194,29 +200,17 @@ const prompts = async () => {
           break;
         case "Update an Employee Role":
           console.log("Running Update an Employee Role Case");
-          let employeesQuery = db.query(
-            `SELECT CONCAT(employee.first_name, " ", employee.last_name) AS Name FROM employee;`,
-            (err, result) => {
-              if (err) {
-                return "error";
-              } else {
-                result.forEach((result) => {
-                  console.log(JSON.stringify(result));
-                });
-              }
-            }
-          );
           inquirer
             .prompt([
               {
                 name: "employeeName",
                 type: "list",
                 message: "Which employee's role do you want to update?",
-                choices: [employeesQuery],
+                choices: employeeChoices(),
               },
             ])
             .then((answers) => {
-              console.log("inside department prompt");
+              console.log("inside Update Employee Role prompt");
               console.log(answers);
             });
           break;
