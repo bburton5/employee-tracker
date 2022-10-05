@@ -13,6 +13,14 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the company_db database.`)
 );
+
+// Function to welcome user and give instructions
+const welcomeMessage = () => {
+  console.log(
+    "Welcome to the Employee Tracker App! Please follow the prompts in the terminal to select your desired option. When you are done, please control + C to exit."
+  );
+};
+
 // Function to query all departments
 let viewAllDepartments = () => {
   db.query(`SELECT * FROM department;`, (err, result) => {
@@ -316,4 +324,5 @@ const prompts = async () => {
     });
 };
 
+welcomeMessage();
 prompts();
