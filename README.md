@@ -5,7 +5,7 @@
 ## Links
 
 - Repository: https://github.com/bburton5/employee-tracker
-- Walkthrough:
+- Walkthrough: https://drive.google.com/file/d/19HDES1IzcYxlWUcU8CwSRsPVAihLBNXB/view
 
 ## Usage
 
